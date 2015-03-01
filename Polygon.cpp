@@ -6,23 +6,23 @@ Polygon::Polygon() {
 }
 Polygon::Polygon(vector<Point> p) {
 	for (int i=0; i<p.size(); i++) {
-		vertex[i].setX(p[i].getX());
-		vertex[i].setY(p[i].getY());
+		Point q(p[i].getX(), p[i].getY());
+		vertex.push_back(q);
 	}
 	findCentroid();
 }
 Polygon::Polygon(const Polygon& p) {
+	if (vertex.size() > 0) vertex.clear();
 	for (int i=0; i<p.getVertex().size(); i++) {
-		vertex[i].setX(p.getVertex()[i].getX());
-		vertex[i].setY(p.getVertex()[i].getY());
+		vertex.push_back(p.getVertex()[i]);
 	}
 	centroid.setX(p.getCentroid().getX());
 	centroid.setY(p.getCentroid().getY());
 }
 Polygon& Polygon::operator=(const Polygon& p) {
+	if (vertex.size() > 0) vertex.clear();
 	for (int i=0; i<p.getVertex().size(); i++) {
-		vertex[i].setX(p.getVertex()[i].getX());
-		vertex[i].setY(p.getVertex()[i].getY());
+		vertex.push_back(p.getVertex()[i]);
 	}
 	centroid.setX(p.getCentroid().getX());
 	centroid.setY(p.getCentroid().getY());

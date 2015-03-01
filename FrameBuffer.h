@@ -3,6 +3,7 @@
 
 #include "header.h"
 #include "Point.h"
+#include "Polygon.h"
 
 class FrameBuffer{
 	private :
@@ -18,6 +19,8 @@ class FrameBuffer{
 
 		void putPixel(int x, int y, unsigned int color);
 		void putPixel(Point P, unsigned int color);
+		void drawLine(Point p0, Point p1, unsigned int color);
+		void drawPolygon(Polygon p, unsigned int color);
 		unsigned int getPixel(int x, int y);
 		unsigned int getPixel(Point P);
 		long int getScreensize();
