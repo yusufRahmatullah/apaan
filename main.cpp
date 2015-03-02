@@ -100,6 +100,11 @@ int main() {
 		fb.drawPolygon(vpapua, 0x00FF00);
 		view.draw(&fb);
 		window.draw(&fb);
+		window.drawClip(vsumatra, view, &fb);
+		window.drawClip(vjawa, view, &fb);
+		window.drawClip(vkalimantan, view, &fb);
+		window.drawClip(vsulawesi, view, &fb);
+		view.drawClip(vpapua, window, &fb);
 		fb.drawScreen();
 	}	
 	return 0;

@@ -25,5 +25,9 @@ class Rect{
 		void setLeftTop(int x, int y);
 		void move(int moveX, int moveY);
 		void draw(FrameBuffer *fb);
+		int findRegion(Point P);
+		int findRegion(int x, int y);
+		bool clipLine(Point P1, Point P2, Point& P3, Point& P4);
+		void drawClip(vector<Point> v, Rect r, FrameBuffer *fb);
 };
 #endif
