@@ -13,6 +13,7 @@ class FrameBuffer{
 		long int screensize;
 		char *backbuffer;
 		char *fbp;
+		int width, height;
 	public :	
 		FrameBuffer();
 		~FrameBuffer();
@@ -27,5 +28,7 @@ class FrameBuffer{
 		long getRelativePosition(int x, int y);
 		void initScreen();
 		void drawScreen();
+		int getWidth();
+		int getHeight();
 };
 #endif

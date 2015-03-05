@@ -5,22 +5,36 @@
 FrameBuffer::FrameBuffer(){
 	fbfd = open("/dev/fb0", O_RDWR);
 
+	if(fbfd == -1){
+		perror("Error : ");
+		exit(1);
+	}
+
 	//get var screen info
-	ioctl(fbfd, FBIOGET_VSCREENINFO, &vinfo);
+	if(ioctl(fbfd, FBIOGET_VSCREENINFO, &vinfo)){
+		perror("Error ");
+		exit(3);
+	}
 	vinfo.grayscale=0;
 	vinfo.bits_per_pixel=32;
-	ioctl(fbfd, FBIOPUT_VSCREENINFO, &vinfo);
-	ioctl(fbfd, FBIOGET_VSCREENINFO, &vinfo);
+	//ioctl(fbfd, FBIOPUT_VSCREENINFO, &vinfo);
+	if(ioctl(fbfd, FBIOGET_FSCREENINFO, &finfo)){
+		perror("Error ");
+		exit(2);
+	}
 	
+	height = vinfo.yres;
+	width = vinfo.xres;
      //Get fix screen information
 	ioctl(fbfd, FBIOGET_FSCREENINFO, &finfo);
 
 	screensize = vinfo.yres_virtual * finfo.line_length;
 	
 	backbuffer = new char[screensize];
-	fbp = (char*) mmap(0, screensize, PROT_READ | PROT_WRITE, MAP_SHARED, fbfd, (off_t)0);
+	fbp = (char*) mmap(0, finfo.smem_len, PROT_READ | PROT_WRITE, MAP_SHARED, fbfd, (off_t)0);
 }
 FrameBuffer::~FrameBuffer(){
+	initScreen();
 	delete [] backbuffer;
 	munmap(fbp, screensize);
 	close(fbfd);
@@ -89,4 +103,10 @@ void FrameBuffer::initScreen(){
 
 void FrameBuffer::drawScreen(){
 	memcpy(fbp, backbuffer, screensize);
+}
+int FrameBuffer::getWidth(){
+	return width;
+}
+int FrameBuffer::getHeight(){
+	return height;
 }
