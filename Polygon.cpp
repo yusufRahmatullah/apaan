@@ -12,18 +12,12 @@ Polygon::Polygon(vector<Point> p) {
 	findCentroid();
 }
 Polygon::Polygon(const Polygon& p) {
-	if (vertex.size() > 0) vertex.clear();
-	for (int i=0; i<p.getVertex().size(); i++) {
-		vertex.push_back(p.getVertex()[i]);
-	}
+	vertex = p.vertex;
 	centroid.setX(p.getCentroid().getX());
 	centroid.setY(p.getCentroid().getY());
 }
 Polygon& Polygon::operator=(const Polygon& p) {
-	if (vertex.size() > 0) vertex.clear();
-	for (int i=0; i<p.getVertex().size(); i++) {
-		vertex.push_back(p.getVertex()[i]);
-	}
+	vertex = p.vertex;
 	centroid.setX(p.getCentroid().getX());
 	centroid.setY(p.getCentroid().getY());
 	return *this;
@@ -68,16 +62,14 @@ Point Polygon::getCentroid() const {
 	return centroid;
 }
 void Polygon::setVertex(vector<Point> p) {
-	for (int i=0; i<p.size(); i++) {
-		vertex[i].setX(p[i].getX());
-		vertex[i].setY(p[i].getY());
-	}
+	vertex = p;
 	findCentroid();
 }
 void Polygon::rotateMe(Point center, double angle) {
 	for(int i=0; i<vertex.size(); i++) {
 		vertex[i].rotateMe(center, angle);
 	}
+	findCentroid();
 }
 Polygon Polygon::rotate(Point center, double angle) {
 	Polygon p = *this;
@@ -88,6 +80,7 @@ void Polygon::scaleMe(Point center, double skala) {
 	for(int i=0; i<vertex.size(); i++) {
 		vertex[i].scaleMe(center, skala);
 	}
+	findCentroid();
 }
 Polygon Polygon::scale(Point center, double skala) {
 	Polygon p = *this;
@@ -98,6 +91,7 @@ void Polygon::moveMe(int moveX, int moveY) {
 	for(int i=0; i<vertex.size(); i++) {
 		vertex[i].moveMe(moveX, moveY);
 	}
+	findCentroid();
 }
 Polygon Polygon::move(int moveX, int moveY) {
 	Polygon p = *this;
