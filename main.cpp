@@ -99,11 +99,11 @@ int main() {
 	window.setColor(0xFF00FF00);
 	
 	//init keyboard listener
-	/*tcgetattr(0, &orig_termios);
+	tcgetattr(0, &orig_termios);
 	memcpy(&new_termios, &orig_termios, sizeof(new_termios));
 	atexit(resetTerminal);
 	cfmakeraw(&new_termios);
-	tcsetattr(0, TCSANOW, &new_termios);*/
+	tcsetattr(0, TCSANOW, &new_termios);
 	
 	// Baling - baling
 	vector<Point> vbaling1; 
@@ -144,10 +144,18 @@ int main() {
 	bool ketembak = false;
 	bool nembak = false;
 	
+	/*** Bahan debug ***/
 	Polygon balingkw = baling1;
 	balingkw.move(-50, -30);
+	vector<Point> vkotak;
+	vkotak.push_back(Point(0,0));
+	vkotak.push_back(Point(100, 0));
+	vkotak.push_back(Point(100,100));
+	vkotak.push_back(Point(0,100));
+	Polygon kotak(vkotak);
+	kotak.moveMe(340, 340);
 	
-	while(1){
+	while(1) {
 		handleInput();
 		fb.initScreen();
 		
@@ -157,6 +165,7 @@ int main() {
 		fb.drawPolygon(vkalimantan, 0x00FF00);
 		fb.drawPolygon(vsulawesi, 0x00FF00);
 		fb.drawPolygon(vpapua, 0x00FF00);
+		//fb.drawPolygon(kotak, 0xFF0000);
 		
 		// Transformasi objek
 		Polygon temp1,temp2;
@@ -170,7 +179,6 @@ int main() {
 		kapal.moveMe(-2, 0);
 		balingkw.rotateMe(baling1.getCentroid()	, angle);
 		
-		
 		// Gambar objek
 		if (!ketembak)
 			fb.drawPolygon(temp1, 0xFF0000);
@@ -178,7 +186,6 @@ int main() {
 			fb.drawPolygon(temp2, 0x0FF0FF);
 		fb.drawPolygon(kapal, 0x0000FF);
 		fb.drawPolygon(balingkw, 0xF0F0F0);
-		
 		
 		// Draw view dan window
 		view.draw(&fb);
@@ -191,6 +198,7 @@ int main() {
 		window.drawClip(kapal, view, &fb);
 		if(!ketembak) window.drawClip(temp1, view, &fb);
 		if(nembak && !ketembak) window.drawClip(temp2, view, &fb);
+		//window.drawClip(kotak, view, &fb);
 		
 		// Gambar semua
 		fb.drawScreen();

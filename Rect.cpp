@@ -105,27 +105,33 @@ bool Rect::clipLine(Point P1, Point P2, Point& P3, Point& P4)
         else  //if no trivial reject or accept, continue the loop
         {
             int x, y;
+            double dox, doy;
             codeout = code1 ? code1 : code2;
             if(codeout & 1) //top
             {
-                x = x1 + (x2 - x1) * (leftTop.getY()+height - y1) / (y2 - y1);
+				dox = (double)(x2 - x1) * (double)(leftTop.getY()+height - y1) / (double)(y2 - y1);
+				x = x1 + dox;
                 y = leftTop.getY()+height - 1;
             }
             else if(codeout & 2) //bottom
-            {
-                x = x1 + (x2 - x1) * leftTop.getY()-y1 / (y2 - y1);
+            {	
+				dox = (double)(x2 - x1) * (double)(leftTop.getY()-y1) / (double)(y2 - y1);
+				x = x1 + dox;
                 y = leftTop.getY();
             }
             else if(codeout & 4) //right
-            {
-                y = y1 + (y2 - y1) * (leftTop.getX()+width - x1) / (x2 - x1);
+            {	
+				doy = (double)(y2 - y1) * (double)(leftTop.getX()+width - x1) / (double)(x2 - x1);
+				y = y1 + doy;
                 x = leftTop.getX()+width - 1;
             }
             else //left
             {
-                y = y1 + (y2 - y1) * leftTop.getX()-x1 / (x2 - x1);
+				doy = (double)(y2 - y1) * (double)(leftTop.getX()-x1) / (double)(x2 - x1);
+				y = y1 + doy;
                 x = leftTop.getX();
             }
+            
             if(codeout == code1) //first endpoint was clipped
             {
                 x1 = x; y1 = y;
@@ -156,22 +162,43 @@ bool Rect::clipLine(Point P1, Point P2, Point& P3, Point& P4)
         return 0;
     }
 }
-void Rect::drawClip(vector<Point> v, Rect r, FrameBuffer *fb){
+/*void Rect::drawClip(vector<Point> v, Rect r, FrameBuffer *fb){
 	Point P1, P2;
 	for(int i=0; i<v.size()-1; i++){
 		if(clipLine(v[i], v[i+1], P1, P2)){
 			P1.moveMe(r.leftTop.getX() - leftTop.getX(), r.leftTop.getY() - leftTop.getY());
 			P2.moveMe(r.leftTop.getX() - leftTop.getX(), r.leftTop.getY() - leftTop.getY());
-			P1.scale(r.leftTop, r.height/height);
-			P2.scale(r.leftTop, r.height/height);
+			P1.scaleMe(r.leftTop, r.height/height);
+			P2.scaleMe(r.leftTop, r.height/height);
 			fb->drawLine(P1, P2, 0xFF00FF00);
 		}
 	}
-	if(clipLine(v[v.size()], v[0], P1, P2)){
+	if(clipLine(v[v.size()-1], v[0], P1, P2)){
 			P1.moveMe(r.leftTop.getX() - leftTop.getX(), r.leftTop.getY() - leftTop.getY());
 			P2.moveMe(r.leftTop.getX() - leftTop.getX(), r.leftTop.getY() - leftTop.getY());
-			P1.scale(r.leftTop, r.height/height);
-			P2.scale(r.leftTop, r.height/height);
+			P1.scaleMe(r.leftTop, r.height/height);
+			P2.scaleMe(r.leftTop, r.height/height);
+			fb->drawLine(P1, P2, 0xFF00FF00);
+		}
+}*/
+void Rect::drawClip(Polygon p, Rect r, FrameBuffer *fb){
+	Point P1, P2;
+	vector<Point> v = p.getVertex();
+	for(int i=0; i<v.size()-1; i++){
+		if(clipLine(v[i], v[i+1], P1, P2)){
+			P1.moveMe(r.leftTop.getX() - leftTop.getX(), r.leftTop.getY() - leftTop.getY());
+			P2.moveMe(r.leftTop.getX() - leftTop.getX(), r.leftTop.getY() - leftTop.getY());
+			P1.scaleMe(r.leftTop, (double)r.height/(double)height);
+			P2.scaleMe(r.leftTop, (double)r.height/(double)height);
+			fb->drawLine(P1, P2, 0xFF00FF00);
+		}
+	}
+	if(clipLine(v[v.size()-1], v[0], P1, P2)){
+			P1.moveMe(r.leftTop.getX() - leftTop.getX(), r.leftTop.getY() - leftTop.getY());
+			P2.moveMe(r.leftTop.getX() - leftTop.getX(), r.leftTop.getY() - leftTop.getY());
+			P1.scaleMe(r.leftTop, (double)r.height/(double)height);
+			P2.scaleMe(r.leftTop, (double)r.height/(double)height);
 			fb->drawLine(P1, P2, 0xFF00FF00);
 		}
 }
+
