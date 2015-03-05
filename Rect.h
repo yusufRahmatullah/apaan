@@ -28,6 +28,6 @@ class Rect{
 		int findRegion(Point P);
 		int findRegion(int x, int y);
 		bool clipLine(Point P1, Point P2, Point& P3, Point& P4);
-		void drawClip(vector<Point> v, Rect r, FrameBuffer *fb);
+		void drawClip(Polygon p, Rect r, FrameBuffer *fb);
 };
 #endif
