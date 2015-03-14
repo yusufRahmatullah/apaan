@@ -2,6 +2,7 @@
 #define HEADER_H
 
 #include <linux/fb.h>
+#include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
