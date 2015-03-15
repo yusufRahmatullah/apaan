@@ -173,3 +173,40 @@ void Object3D::drawOblique(FrameBuffer *fb){
 		fb->drawLine(first, second, 0xFFFFFFFF);
 	}
 }
+void Object3D::drawIsometric(FrameBuffer *fb){
+	double s = sqrt(3)/2;
+
+	for(int i=0; i<edges.size(); i++){
+		double tempX = (double)vertices[edges[i].first].getX()*s - (double)vertices[edges[i].first].getZ()*s;
+		double tempY = (double)vertices[edges[i].first].getX()/2 + (double)vertices[edges[i].first].getZ()/2 + (double)vertices[edges[i].first].getY();
+		Point first(tempX, tempY);
+
+		tempX = (double)vertices[edges[i].second].getX()*s - (double)vertices[edges[i].second].getZ()*s;
+		tempY = (double)vertices[edges[i].second].getX()/2 + (double)vertices[edges[i].second].getZ()/2 + (double)vertices[edges[i].second].getY();
+		Point second(tempX, tempY);
+
+		fb->drawLine(first, second, 0xFFFFFFFF);
+	}
+}
+void Object3D::drawOrthogonal(FrameBuffer *fb){
+	double d = 500;
+	Point center(fb->getWidth()/2, fb->getHeight()/2);
+
+	for(int i=0; i<edges.size(); i++){
+		double cx = (double)(vertices[edges[i].first].getX() );
+		double cy = (double)(vertices[edges[i].first].getY() );
+
+		double u = (d * cx / ((double)vertices[edges[i].first].getZ() + d));
+		double v = (d * cy / ((double)vertices[edges[i].first].getZ() + d));
+		Point first(u,v);
+		
+		cx = (double)(vertices[edges[i].second].getX());
+		cy = (double)(vertices[edges[i].second].getY());
+
+		u = (d * cx / ((double)vertices[edges[i].second].getZ() + d));
+		v = (d * cy / ((double)vertices[edges[i].second].getZ() + d));
+		Point second(u,v);
+		
+		fb->drawLine(first, second, 0xFFFFFFFF);
+	}
+}
