@@ -17,14 +17,19 @@ class Polygon {
 		void rotateMe(Point center, double angle);
 		void scaleMe(Point center, double skala);
 		void moveMe(int moveX, int moveY);
+		Point getEkstremKiri();
+		Point getEkstremKanan();
+		Point getEkstremAtas();
+		Point getEkstremBawah();
 		Polygon rotate(Point center, double angle);
 		Polygon scale(Point center, double skala);
 		Polygon move(int moveX, int moveY);
 		bool isInside(Point p);
 	private:
 		vector<Point> vertex;
-		Point centroid;
+		Point centroid, ekstremKiri, ekstremKanan, ekstremAtas, ekstremBawah;
 		void findCentroid();
+		void findExtreme();
 		bool onSegment(Point p, Point q, Point r);
 		int orientation(Point p, Point q, Point r);
 		bool doIntersect(Point p1, Point q1, Point p2, Point q2);
