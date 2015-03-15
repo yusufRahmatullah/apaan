@@ -11,6 +11,7 @@ Polygon::Polygon(vector<Point> p) {
 		vertex.push_back(q);
 	}
 	findCentroid();
+	findExtreme();
 }
 Polygon::Polygon(const Polygon& p) {
 	vertex = p.vertex;
@@ -63,12 +64,14 @@ Point Polygon::getCentroid() {
 void Polygon::setVertex(vector<Point> p) {
 	vertex = p;
 	findCentroid();
+	findExtreme();
 }
 void Polygon::rotateMe(Point center, double angle) {
 	for(int i=0; i<vertex.size(); i++) {
 		vertex[i].rotateMe(center, angle);
 	}
 	findCentroid();
+	findExtreme();
 }
 Polygon Polygon::rotate(Point center, double angle) {
 	Polygon p = *this;
@@ -80,6 +83,7 @@ void Polygon::scaleMe(Point center, double skala) {
 		vertex[i].scaleMe(center, skala);
 	}
 	findCentroid();
+	findExtreme();
 }
 Polygon Polygon::scale(Point center, double skala) {
 	Polygon p = *this;
@@ -91,11 +95,40 @@ void Polygon::moveMe(int moveX, int moveY) {
 		vertex[i].moveMe(moveX, moveY);
 	}
 	findCentroid();
+	findExtreme();
 }
 Polygon Polygon::move(int moveX, int moveY) {
 	Polygon p = *this;
 	p.moveMe(moveX, moveY);
 	return p;
+}
+Point Polygon::getEkstremKiri() {
+	return ekstremKiri;
+}
+Point Polygon::getEkstremKanan(){
+	return ekstremKanan;
+}
+Point Polygon::getEkstremAtas() {
+	return ekstremAtas;
+}
+Point Polygon::getEkstremBawah() {
+	return ekstremBawah;
+}
+void Polygon::findExtreme() {
+	ekstremKiri = vertex[0];
+	ekstremKanan = vertex[0];
+	ekstremAtas = vertex[0];
+	ekstremBawah = vertex[0];
+	for(int i=1; i<vertex.size(); i++) {
+		if(vertex[i].getX() < ekstremKiri.getX())
+			ekstremKiri = vertex[i];
+		if(vertex[i].getX() > ekstremKanan.getX())
+			ekstremKanan = vertex[i];
+		if(vertex[i].getY() < ekstremAtas.getX())
+			ekstremAtas = vertex[i];
+		if(vertex[i].getY() > ekstremBawah.getX())
+			ekstremBawah = vertex[i];
+	}
 }
 
 /*************************************************************************************
