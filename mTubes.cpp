@@ -17,11 +17,23 @@ int main(){
 
 	pid = fork();
 	if(pid==0){
+		execl("colorpicker", "colorpicker", NULL);
+	}else{
+		waitpid(pid, &stat, 0);
+	}
+
+	pid = fork();
+	if(pid==0){
 		execl("m3dmap", "m3dmap", NULL);
 	}else{
 		waitpid(pid, &stat, 0);
 	}
 
-	cout << "status : " << stat << endl;
+	pid = fork();
+	if(pid==0){
+		execl("main", "main", NULL);
+	}else{
+		waitpid(pid, &stat, 0);
+	}
 	return 0;
 }

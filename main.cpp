@@ -106,6 +106,7 @@ int main() {
 	tcsetattr(0, TCSANOW, &new_termios);
 	
 	// Baling - baling
+	/*
 	vector<Point> vbaling1; 
 	vbaling1.push_back(Point(0,0));
 	vbaling1.push_back(Point(100,0));
@@ -115,26 +116,53 @@ int main() {
 	vbaling1.push_back(Point(48,50));
 	Polygon baling1(vbaling1);
 	baling1.moveMe(0, 300);
+	*/
 	
 	// Kapal
 	vector<Point> vkapal;
+	vkapal.push_back(Point(20,0));
 	vkapal.push_back(Point(30,0));
-	vkapal.push_back(Point(130,0));
-	vkapal.push_back(Point(160,20));
-	vkapal.push_back(Point(130,40));
-	vkapal.push_back(Point(30,40));
-	vkapal.push_back(Point(0,20));
+	vkapal.push_back(Point(40,5));
+	vkapal.push_back(Point(30,10));
+	vkapal.push_back(Point(20,10));
+	vkapal.push_back(Point(10,5));
 	Polygon kapal(vkapal);
-	kapal.moveMe(600, 320);
+	kapal.moveMe(500, 270);
+
+	//pesawat
+	vector<Point> vpesawat;
+	vpesawat.push_back(Point(100,100));
+	vpesawat.push_back(Point(110,110));
+	vpesawat.push_back(Point(110, 120));
+	vpesawat.push_back(Point(130, 130));
+	vpesawat.push_back(Point(110, 130));
+	vpesawat.push_back(Point(110, 145));
+	vpesawat.push_back(Point(120, 150));
+	vpesawat.push_back(Point(105, 150));
+
+	vpesawat.push_back(Point(100, 160));
+
+	vpesawat.push_back(Point(95, 150));
+	vpesawat.push_back(Point(80, 150));
+	vpesawat.push_back(Point(90, 145));
+	vpesawat.push_back(Point(90, 130));
+	vpesawat.push_back(Point(70, 130));
+	vpesawat.push_back(Point(90, 120));
+	vpesawat.push_back(Point(90,110));
+
+	Polygon pesawat(vpesawat);
+	pesawat.moveMe(200, 220);
 	
 	//Peluru
 	vector<Point> vpeluru;
-	vpeluru.push_back(Point(0,0));
-	vpeluru.push_back(Point(2,0));
+	vpeluru.push_back(Point(0,1));
+	vpeluru.push_back(Point(1,0));
+	vpeluru.push_back(Point(2,1));
 	vpeluru.push_back(Point(2,2));
+	vpeluru.push_back(Point(1,3));
 	vpeluru.push_back(Point(0,2));
 	Polygon peluru(vpeluru);
-	peluru.moveMe(500, 340);
+	peluru.moveMe(300, 275);
 	
 	int i=0;
 	double angle = 0;
@@ -145,8 +173,10 @@ int main() {
 	bool nembak = false;
 	
 	/*** Bahan debug ***/
+	/*
 	Polygon balingkw = baling1;
 	balingkw.move(-50, -30);
+	*/
 	vector<Point> vkotak;
 	vkotak.push_back(Point(0,0));
 	vkotak.push_back(Point(100, 0));
@@ -154,6 +184,7 @@ int main() {
 	vkotak.push_back(Point(0,100));
 	Polygon kotak(vkotak);
 	kotak.moveMe(340, 340);
+
 	
 	while(1) {
 		handleInput();
@@ -170,22 +201,25 @@ int main() {
 		// Transformasi objek
 		Polygon temp1,temp2;
 		if (!ketembak) {
-			temp1 = baling1.rotate(baling1.getCentroid(), angle);
-			temp1.moveMe(moveX, 0);
+			//temp1 = baling1.rotate(baling1.getCentroid(), angle);
+			//temp1.moveMe(moveX, 0);
 		}
 		if (nembak) {
 			temp2 = peluru.scale(peluru.getCentroid(), skala);
 		}
 		kapal.moveMe(-2, 0);
-		balingkw.rotateMe(baling1.getCentroid()	, angle);
+		pesawat.moveMe(0, -4);
+		if(pesawat.getEkstremAtas().getY() <= -60) pesawat.moveMe(0,350);
+		if(kapal.getEkstremKiri().getX() <= 240) kapal.moveMe(260, 0);
+		//balingkw.rotateMe(baling1.getCentroid()	, angle);
 		
 		// Gambar objek
-		if (!ketembak)
-			fb.drawPolygon(temp1, 0xFF0000);
+		if (!ketembak) fb.drawPolygon(pesawat, 0xFFFF00);
+			//fb.drawPolygon(temp1, 0xFF0000);
 		if (nembak && !ketembak)
 			fb.drawPolygon(temp2, 0x0FF0FF);
 		fb.drawPolygon(kapal, 0x0000FF);
-		fb.drawPolygon(balingkw, 0xF0F0F0);
+		//fb.drawPolygon(balingkw, 0xF0F0F0);
 		
 		// Draw view dan window
 		view.draw(&fb);
@@ -196,7 +230,8 @@ int main() {
 		window.drawClip(vsulawesi, view, &fb);
 		window.drawClip(vpapua, view, &fb);
 		window.drawClip(kapal, view, &fb);
-		if(!ketembak) window.drawClip(temp1, view, &fb);
+		window.drawClip(pesawat, view, &fb);
+		//if(!ketembak) window.drawClip(temp1, view, &fb);
 		if(nembak && !ketembak) window.drawClip(temp2, view, &fb);
 		//window.drawClip(kotak, view, &fb);
 		
@@ -208,7 +243,7 @@ int main() {
 		moveX += 2;
 		if (!ketembak && nembak) {
 			skala += 0.1;
-			Point c = temp1.getCentroid();
+			Point c = pesawat.getCentroid();
 			vector<Point> vp = temp2.getVertex();
 			if (c.getX() >= vp[0].getX() && c.getX() <= vp[1].getX()
 				&& c.getY() >= vp[0].getY() && c.getY() <= vp[3].getY())
@@ -216,8 +251,11 @@ int main() {
 		}
 		if (!nembak) {
 			Point a = kapal.getCentroid();
-			if( a.getX() <= 500 )
+			if( a.getX() <= 300 )
 				nembak = true;
+		}
+		if(ketembak && (kapal.getEkstremKiri().getX() >= 450)){
+			exit(0);
 		}
 	}
 	return 0;
