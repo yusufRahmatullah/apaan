@@ -45,5 +45,10 @@ public:
 	void drawOblique(FrameBuffer *fb);
 	void drawIsometric(FrameBuffer *fb);
 	void drawOrthogonal(FrameBuffer *fb);
+	vector<pair<Point, Point> > to2DLines();
+	unsigned char findRegion(vector<Point> rect, const Point& pt);
+	bool antiClipLine(const Point& P1, const Point& P2, Point& P3, Point& P4);
+	void drawAntiClip(const vector<pair<Point, Point> >& vpp, FrameBuffer *fb);
+	vector<pair<Point, Point> > doCliping(const vector<Object3D>& vo);
 };
 #endif

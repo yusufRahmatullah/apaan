@@ -1,15 +1,22 @@
 #include <cstdio>
 #include "Projection.h"
+#include "FrameBuffer.h"
+#include "Point.h"
 
 using namespace std;
 
+FrameBuffer fb;
+
 void DrawLine(int p1x, int p1y, int p2x, int p2y, unsigned int color){
 	//Dummy
+	/*
 	if (color==0xF0F0F0F0){
 		printf("RED\n");
 	} else {
 		printf("BLACK\n");
-	}
+	}*/
+
+	fb.drawLine(Point(p1x, p1y), Point(p2x, p2y), color);
 }
 
 int main(){
@@ -17,8 +24,12 @@ int main(){
 	double pov =  20;
 	double near = 100;
 	double far =  140;
-	unsigned int RED=0xF0F0F0F0, BLACK=0xFFFFFFFF;
+	unsigned int RED=0xFFFF0000, BLACK=0xFFFFFFFF;
 	Projection proc;
+
+	//init frame buffer
+	fb.initScreen();
+
 	//draw border for window
 	DrawLine(320, 20, 1120, 20, BLACK);
 	DrawLine(320, 820, 1120, 820, BLACK);
@@ -94,4 +105,6 @@ int main(){
 	DrawLine(proc.p1.h, proc.p1.v, proc.p2.h, proc.p2.v, RED);
 	proc.Trans_Line(Dpoint7, Dpoint8);
 	DrawLine(proc.p1.h, proc.p1.v, proc.p2.h, proc.p2.v, RED);
+
+	fb.drawScreen();
 }
