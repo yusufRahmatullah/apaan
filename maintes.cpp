@@ -26,7 +26,7 @@ void animation() {
 	Pesawat pesawat(Point(1100,80), 20, -12, 0);
 	Kapal kapal(Point(0,ground), 30, 10, 0);
 	Ledakan ledakan(100, 300, 30);
-	Parasut parasut(10, 3, 1);
+	Parasut parasut(10, 3, 5);
 	Peluru &peluru = kapal.getPeluru();
 	Parabola frag1(pesawat.getPointerFrag1(), -10, 0, 4, ground, 0.5);
 	Parabola frag2(pesawat.getPointerFrag2(), 10, 0, 4, ground, 0.5);
@@ -98,5 +98,7 @@ void animation() {
 		
 		/* Delay */
 		usleep(delay);
+
+		if(parasut.getBody().getEkstremBawah().getY() >= ground) exit(0);
 	}
 }
