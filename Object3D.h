@@ -43,5 +43,7 @@ public:
 	void scale(Vertex center, double scale);
 	void move(int move_x, int move_y, int move_z);
 	void drawOblique(FrameBuffer *fb);
+	void drawIsometric(FrameBuffer *fb);
+	void drawOrthogonal(FrameBuffer *fb);
 };
 #endif
