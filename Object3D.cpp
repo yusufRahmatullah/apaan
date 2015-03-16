@@ -189,7 +189,7 @@ void Object3D::drawIsometric(FrameBuffer *fb){
 	}
 }
 void Object3D::drawOrthogonal(FrameBuffer *fb){
-	double d = 500;
+	double d = 1000;
 	Point center(fb->getWidth()/2, fb->getHeight()/2);
 
 	for(int i=0; i<edges.size(); i++){
@@ -209,4 +209,57 @@ void Object3D::drawOrthogonal(FrameBuffer *fb){
 		
 		fb->drawLine(first, second, 0xFFFFFFFF);
 	}
+}
+vector<pair<Point, Point> > Object3D::to2DLines(){
+	vector<pair<Point, Point> > retv;
+	Point first, second;
+	Point center(683, 384);
+
+	//algoritma dari Projection.cpp
+	for(int i=0; i<edges.size(); i++){
+		first.setX(768 - 1366 * vertices[edges[i].first].getX() / 2);
+		first.setY(384 - 768 * vertices[edges[i].first].getZ() / 2);
+
+		second.setX(768 - 1366 * vertices[edges[i].second].getX() / 2);
+		second.setY(384 - 768 * vertices[edges[i].second].getZ() / 2);
+
+		retv.push_back(pair<Point, Point>(first, second));
+	}
+
+	return retv;
+}
+unsigned char Object3D::findRegion(vector<Point> rect, const Point& pt){
+	unsigned char code = 0;
+	Point leftTop, rigthTop, leftBottom, rightBottom;
+	Point min(9999, 9999);
+	int idel;
+
+	//identifikasi ke-4 titik
+	
+	for(int i=0; i<rect.size(); i++){
+		if(rect[i].getX() < min.getX()){
+			min.setX(rect[i].getX());
+			if(rect[i].getY() < min.getY()){
+				min.setY(rect[i].getY());
+				idel = i;
+			}
+		}
+	}
+	leftTop = min;
+	min.setX(9999);min.setY(9999);
+	rect.erase(idel);
+
+
+
+	//algoritma dari Rect.cpp
+	if()
+}
+bool Object3D::antiClipLine(const Point& P1, const Point& P2, Point& P3, Point& P4){
+
+}
+void Object3D::drawAntiClip(const vector<pair<Point, Point> >& vpp, FrameBuffer *fb){
+
+}
+vector<pair<Point, Point> > Object3D::doCliping(const vector<Object3D>& vo){
+	//untuk setiap objek, tentukan bagian depan, kiri, dan 
 }

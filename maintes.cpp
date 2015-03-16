@@ -14,6 +14,27 @@ using namespace std;
 unsigned int delay = 100000;
 void animation();
 
+void handleInput(){
+	int keyCode;
+	int r;
+	unsigned char c;
+	struct timeval tv = {0L, 0L};
+	fd_set fds;
+	FD_ZERO(&fds);
+	FD_SET(0, &fds);
+	if(select(1, &fds, NULL, NULL, &tv)){
+		if((r = read(0, &c, sizeof(c)))<0)
+			keyCode = r;
+		else
+			keyCode = c;
+
+		if(keyCode == 27 || keyCode == 'p'){
+			system("clear");
+			exit(0);
+		}
+	}
+}
+
 int main() {
 	animation();
 	
@@ -26,7 +47,7 @@ void animation() {
 	Pesawat pesawat(Point(1100,80), 20, -12, 0);
 	Kapal kapal(Point(0,ground), 30, 10, 0);
 	Ledakan ledakan(100, 300, 30);
-	Parasut parasut(10, 3, 1);
+	Parasut parasut(10, 3, 5);
 	Peluru &peluru = kapal.getPeluru();
 	Parabola frag1(pesawat.getPointerFrag1(), -10, 0, 4, ground, 0.5);
 	Parabola frag2(pesawat.getPointerFrag2(), 10, 0, 4, ground, 0.5);
@@ -38,6 +59,7 @@ void animation() {
 	bool ketembak = false;
 	double angle = 0.1;
 	for(;;) {
+		handleInput();
 		fb.initScreen();
 		
 		/*Debug*/
@@ -99,5 +121,7 @@ void animation() {
 		
 		/* Delay */
 		usleep(delay);
+
+		if(parasut.getBody().getEkstremBawah().getY() >= ground) exit(0);
 	}
 }
