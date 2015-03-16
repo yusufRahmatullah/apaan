@@ -35,5 +35,12 @@ int main(){
 	}else{
 		waitpid(pid, &stat, 0);
 	}
+
+	pid = fork();
+	if(pid==0){
+		execl("maintes", "maintes", NULL);
+	}else{
+		waitpid(pid, &stat, 0);
+	}
 	return 0;
 }
