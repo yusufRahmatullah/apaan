@@ -8,6 +8,8 @@ Pesawat::Pesawat(Point coord, int sz, int spdX, int spdY) : MovingObject(coord, 
 	buildFragments();
 	exist = true;
 }
+Pesawat::~Pesawat() {
+}
 bool Pesawat::isExist() {
 	return exist;
 }
@@ -20,8 +22,15 @@ void Pesawat::cekKetembak(Peluru& peluru) {
 		}
 	}
 }
+void Pesawat::maju() {
+	move();
+	balingActive1.rotateMe(balingActive1.getVertex()[0], 0.6*3.14159);
+	balingActive2.rotateMe(balingActive2.getVertex()[0], 0.6*3.14159);
+	balingActive1.moveMe(speedX, speedY);
+	balingActive2.moveMe(speedX, speedY);
+}
 void Pesawat::buildBody() {
-	vector<Point> v;
+	vector<Point> v, b1, b2;
 	
 	/*Point p1(3,2);
 	Point p2(7,2);
@@ -35,6 +44,7 @@ void Pesawat::buildBody() {
 	Point p10(0,4);
 	Point p11(2,3);*/
 	
+	/* Main body */
 	v.push_back( Point(3,2) );
 	v.push_back( Point(7,2) );
 	v.push_back( Point(8,0) );
@@ -47,10 +57,34 @@ void Pesawat::buildBody() {
 	v.push_back( Point(0,4) );
 	v.push_back( Point(2,3) );
 	
+	/* Baling active */
+	b1.push_back( Point(7,2) );
+	b1.push_back( Point(6,1) );
+	b1.push_back( Point(8,1) );
+	
+	b2.push_back( Point(7,2) );
+	b2.push_back( Point(8,3) );
+	b2.push_back( Point(6,3) );
+	
+	
 	Polygon P(v);
+	Polygon bl1(b1);
+	Polygon bl2(b2);
+	
 	P.scaleMe(P.getCentroid(), size);
+	bl1.scaleMe(bl1.getCentroid(), size);
+	bl2.scaleMe(bl2.getCentroid(), size);
+	
 	P.moveMe(coord.getX(), coord.getY());
+	
+	int x = P.getVertex()[1].getX();
+	int y = P.getVertex()[1].getY();
+	bl1.moveMe(x-bl1.getVertex()[0].getX(), y-bl1.getVertex()[0].getY());
+	bl2.moveMe(x-bl2.getVertex()[0].getX(), y-bl2.getVertex()[0].getY());
+	
 	body = P;
+	balingActive1 = bl1;
+	balingActive2 = bl2;
 }
 Polygon* Pesawat::getPointerBody() {
 	return &body;
@@ -185,4 +219,9 @@ void Pesawat::rotateFragments(double rotate) {
 void Pesawat::drawRoda(FrameBuffer *fb, unsigned int color) {
 	fb->drawPolygon(roda, color);
 	fb->drawPolygon(roda.scale(roda.getCentroid(), 0.5), color);
+}
+void Pesawat::drawPesawat(FrameBuffer* fb, unsigned int color) {
+	fb->drawPolygon(body, color);
+	fb->drawPolygon(balingActive1, color);
+	fb->drawPolygon(balingActive2, color);
 }

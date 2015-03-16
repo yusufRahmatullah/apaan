@@ -49,7 +49,8 @@ void animation() {
 		fb.drawLine(Point(0,ground), Point(fb.getWidth()-1, ground), 0x0000FF);		// Laut
 		fb.drawPolygon(kapal.getBody(), 0x00FF00);
 		if(pesawat.isExist()) {
-			fb.drawPolygon(pesawat.getBody(), 0x00FF00);
+			//fb.drawPolygon(pesawat.getBody(), 0x00FF00);
+			pesawat.drawPesawat(&fb, 0x00FF00);
 		} else {
 			if (!ketembak) {
 				ketembak = true;
@@ -73,7 +74,7 @@ void animation() {
 		
 		/* Update objek */
 		if (pesawat.isExist())
-			pesawat.move();
+			pesawat.maju();
 		else {
 			ledakan.animate(pesawat.getCentroid());
 			pesawat.rotateFragments(angle * 3.14159);

@@ -8,6 +8,7 @@ class Pesawat : public MovingObject {
 	public:
 		Pesawat();
 		Pesawat(Point coord, int sz, int spdX, int spdY);
+		~Pesawat();
 		bool isExist();
 		void cekKetembak(Peluru& peluru);
 		Polygon* getPointerBody();
@@ -23,10 +24,13 @@ class Pesawat : public MovingObject {
 		Polygon* getPointerBaling();
 		void rotateFragments(double rotate);
 		void drawRoda(FrameBuffer *fb, unsigned int color);
+		void maju();
+		void drawPesawat(FrameBuffer* fb, unsigned int color);
 	protected:
 		void buildBody();
 	private:
 		bool exist;
+		Polygon balingActive1, balingActive2;
 		Polygon frag1, frag2, frag3, roda, baling;
 		void buildFragments();
 		void settingFragments();
