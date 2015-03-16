@@ -49,11 +49,11 @@ void animation() {
 	Ledakan ledakan(100, 300, 30);
 	Parasut parasut(10, 3, 5);
 	Peluru &peluru = kapal.getPeluru();
-	Parabola frag1(pesawat.getPointerFrag1(), -10, 0, 4, ground, 0.5);
-	Parabola frag2(pesawat.getPointerFrag2(), 10, 0, 4, ground, 0.5);
-	Parabola frag3(pesawat.getPointerFrag3(), 5, 4, 4, ground, 0.5);
-	Parabola roda(pesawat.getPointerRoda(), 4, 4, 4, ground, 0.5);
-	Parabola baling(pesawat.getPointerBaling(), 6, 4, 4, ground, 0.5);
+	Parabola frag1(pesawat.getPointerFrag1(), -10, 0, 4, ground+20, 0.5);
+	Parabola frag2(pesawat.getPointerFrag2(), 10, 0, 4, ground+20, 0.5);
+	Parabola frag3(pesawat.getPointerFrag3(), 5, 4, 4, ground+20, 0.5);
+	Parabola roda(pesawat.getPointerRoda(), 4, 4, 4, ground+20, 0.5);
+	Parabola baling(pesawat.getPointerBaling(), 6, 4, 4, ground+20, 0.5);
 	
 	int i=0;
 	bool ketembak = false;
@@ -68,29 +68,48 @@ void animation() {
 		pesawat.cekKetembak(kapal.getPeluru());
 		
 		/* Menggambar objek */
-		fb.drawLine(Point(0,ground), Point(fb.getWidth()-1, ground), 0x0000FF);		// Laut
-		fb.drawPolygon(kapal.getBody(), 0x00FF00);
+		for(int y=ground; y<fb.getHeight(); y++)
+			fb.drawLine(Point(0,y), Point(fb.getWidth()-1, y), 0x07155A);		// Laut
+			
+		fb.drawPolygon(kapal.getBody(), 0xA7C8DB);
+		fb.fillPolygon(kapal.getBody(), 0xA7C8DB);
 		if(pesawat.isExist()) {
 			//fb.drawPolygon(pesawat.getBody(), 0x00FF00);
-			pesawat.drawPesawat(&fb, 0x00FF00);
+			pesawat.drawPesawat(&fb, 0x008000, 0xC0C0C0);
 		} else {
 			if (!ketembak) {
 				ketembak = true;
 				parasut.setCoord(pesawat.getCentroid().move(pesawat.getSize()*2, pesawat.getSize()*2));
 			}
-			if(ledakan.getTime() > 0)
+			if(ledakan.getTime() > 0) {
 				fb.drawPolygon(ledakan.getBody(), 0xFF0000);
-			fb.drawPolygon(pesawat.getFrag1(), 0x00FF00);
-			fb.drawPolygon(pesawat.getFrag2(), 0x00FF00);
-			fb.drawPolygon(pesawat.getFrag3(), 0x00FF00);
+				fb.fillPolygon(ledakan.getBody().getCentroid(), 0xFF0000);
+			}
+			
+			/* Gambar pecahan pesawat */
+			fb.drawPolygon(pesawat.getFrag1(), 0x008000);
+			fb.fillPolygon(pesawat.getFrag1(), 0x008000);
+			
+			fb.drawPolygon(pesawat.getFrag2(), 0x008000);
+			fb.fillPolygon(pesawat.getFrag2(), 0x008000);
+			
+			fb.drawPolygon(pesawat.getFrag3(), 0x008000);
+			fb.fillPolygon(pesawat.getFrag3(), 0x008000);
+			
 			//fb.drawPolygon(pesawat.getRoda(), 0x00FF00);
-			pesawat.drawRoda(&fb, 0x00FF00);
-			fb.drawPolygon(pesawat.getBaling(), 0x00FF00);
+			pesawat.drawRoda(&fb, 0x252525, 0xE0E2EF);
+			
+			fb.drawPolygon(pesawat.getBaling(), 0xC0C0C0);
+			fb.fillPolygon(pesawat.getBaling(), 0xC0C0C0);
+			
+			/* Parasut */
 			//fb.drawPolygon(parasut.getBody(), 0x0000FF);
-			parasut.drawParasut(&fb, 0xFF0000);
+			parasut.drawParasut(&fb, 0x690708);
 		}
-		if (peluru.isExist())
+		if (peluru.isExist()) {
 			fb.drawPolygon(peluru.getBody(), 0xFF0000);
+			fb.fillPolygon(peluru.getBody(), 0xFF0000);
+		}
 			
 		fb.drawScreen();
 		

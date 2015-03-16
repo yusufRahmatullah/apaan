@@ -34,6 +34,8 @@ void Kapal::buildBody() {
 	poly.moveMe(coord.getX(), coord.getY());
 	body = poly;
 	
+//	printf("Kiri kanan kapal: %d %d\n", body.getEkstremKiri().getX(), body.getEkstremKanan().getX());
+	
 	Point pos( (body.getVertex()[2].getX()+body.getVertex()[3].getX())/2, body.getVertex()[2].getY() );
 	Peluru plr(pos, (int)((float)size/20.0), 0, -10);
 	peluru = plr;

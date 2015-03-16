@@ -57,6 +57,7 @@ void Parasut::buildBody() {
 }
 void Parasut::drawParasut(FrameBuffer *fb, unsigned int color) {
 	fb->drawPolygon(body, color);
+	fb->fillPolygon(body, color);
 	fb->drawLine(body.getVertex()[5], pc, color);
 	fb->drawLine(body.getVertex()[7], pc, color);
 	fb->drawLine(body.getVertex()[9], pc, color);

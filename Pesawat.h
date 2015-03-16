@@ -23,9 +23,9 @@ class Pesawat : public MovingObject {
 		Polygon* getPointerRoda();
 		Polygon* getPointerBaling();
 		void rotateFragments(double rotate);
-		void drawRoda(FrameBuffer *fb, unsigned int color);
+		void drawRoda(FrameBuffer *fb, unsigned int ban, unsigned int velg);
 		void maju();
-		void drawPesawat(FrameBuffer* fb, unsigned int color);
+		void drawPesawat(FrameBuffer* fb, unsigned int colorBody, unsigned int colorBaling);
 	protected:
 		void buildBody();
 	private:

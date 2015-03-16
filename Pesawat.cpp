@@ -216,12 +216,17 @@ void Pesawat::rotateFragments(double rotate) {
 	baling.rotateMe(baling.getCentroid(), 5*rotate);
 }
 
-void Pesawat::drawRoda(FrameBuffer *fb, unsigned int color) {
-	fb->drawPolygon(roda, color);
-	fb->drawPolygon(roda.scale(roda.getCentroid(), 0.5), color);
+void Pesawat::drawRoda(FrameBuffer *fb, unsigned int ban, unsigned int velg) {
+	fb->drawPolygon(roda, ban);
+	fb->fillPolygon(roda, ban);
+	fb->drawPolygon(roda.scale(roda.getCentroid(), 0.5), velg);
+	fb->fillPolygon(roda.scale(roda.getCentroid(), 0.5), velg);
 }
-void Pesawat::drawPesawat(FrameBuffer* fb, unsigned int color) {
-	fb->drawPolygon(body, color);
-	fb->drawPolygon(balingActive1, color);
-	fb->drawPolygon(balingActive2, color);
+void Pesawat::drawPesawat(FrameBuffer* fb, unsigned int colorBody, unsigned int colorBaling) {
+	fb->drawPolygon(body, colorBody);
+	fb->fillPolygon(body.getCentroid(), colorBody);
+	fb->drawPolygon(balingActive1, colorBaling);
+	fb->fillPolygon(balingActive1, colorBaling);
+	fb->drawPolygon(balingActive2, colorBaling);
+	fb->fillPolygon(balingActive2, colorBaling);
 }

@@ -16,10 +16,18 @@ Polygon::Polygon(vector<Point> p) {
 Polygon::Polygon(const Polygon& p) {
 	vertex = p.vertex;
 	centroid = p.centroid;
+	ekstremKiri = p.ekstremKiri;
+	ekstremKanan = p.ekstremKanan;
+	ekstremAtas = p.ekstremAtas;
+	ekstremBawah = p.ekstremBawah;
 }
 Polygon& Polygon::operator=(const Polygon& p) {
 	vertex = p.vertex;
 	centroid = p.centroid;
+	ekstremKiri = p.ekstremKiri;
+	ekstremKanan = p.ekstremKanan;
+	ekstremAtas = p.ekstremAtas;
+	ekstremBawah = p.ekstremBawah;
 	return *this;
 }
 Polygon::~Polygon() {
@@ -124,9 +132,9 @@ void Polygon::findExtreme() {
 			ekstremKiri = vertex[i];
 		if(vertex[i].getX() > ekstremKanan.getX())
 			ekstremKanan = vertex[i];
-		if(vertex[i].getY() < ekstremAtas.getX())
+		if(vertex[i].getY() < ekstremAtas.getY())
 			ekstremAtas = vertex[i];
-		if(vertex[i].getY() > ekstremBawah.getX())
+		if(vertex[i].getY() > ekstremBawah.getY())
 			ekstremBawah = vertex[i];
 	}
 }

@@ -1,0 +1,1 @@
+g++ -o maintes maintes.cpp Point.cpp Polygon.cpp MovingObject.cpp Pesawat.cpp Kapal.cpp FrameBuffer.cpp Peluru.cpp Ledakan.cpp Parabola.cpp Parasut.cpp

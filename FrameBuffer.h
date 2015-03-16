@@ -30,5 +30,13 @@ class FrameBuffer{
 		void drawScreen();
 		int getWidth();
 		int getHeight();
+
+		void fillPolygon(int x, int y, unsigned int color);
+		void fillPolygon(Point P, unsigned int color);
+		/*********************************************************/
+		void fillPolygon(Polygon p, unsigned int color);
+		void fillGrafik(int x, int y, vector< vector<int> > &grafik);
+		vector< vector<int> > makeGrafik(Polygon p);
+		void drawLineOnGrafik(vector< vector<int> > &grafik, int x0, int y0, int x1, int y1);
 };
 #endif
