@@ -14,6 +14,27 @@ using namespace std;
 unsigned int delay = 100000;
 void animation();
 
+void handleInput(){
+	int keyCode;
+	int r;
+	unsigned char c;
+	struct timeval tv = {0L, 0L};
+	fd_set fds;
+	FD_ZERO(&fds);
+	FD_SET(0, &fds);
+	if(select(1, &fds, NULL, NULL, &tv)){
+		if((r = read(0, &c, sizeof(c)))<0)
+			keyCode = r;
+		else
+			keyCode = c;
+
+		if(keyCode == 27 || keyCode == 'p'){
+			system("clear");
+			exit(0);
+		}
+	}
+}
+
 int main() {
 	animation();
 	
@@ -38,6 +59,7 @@ void animation() {
 	bool ketembak = false;
 	double angle = 0.1;
 	for(;;) {
+		handleInput();
 		fb.initScreen();
 		
 		/*Debug*/
