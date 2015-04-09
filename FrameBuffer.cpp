@@ -228,3 +228,20 @@ void FrameBuffer::drawLineOnGrafik(vector< vector<int> > &grafik, int x0, int y0
 		if(e2 < dy) { err += dx; y0 += sy;}
 	}
 }
+void FrameBuffer::drawLayer(char * layer)
+{
+	memcpy(backbuffer, layer, screensize);
+}
+void FrameBuffer::drawCircle(int xm, int ym, int r, unsigned int color)
+{
+	int x = -r, y = 0, err = 2-2*r; /* II. Quadrant */ 
+   do {
+      putPixel(xm-x, ym+y, color); /*   I. Quadrant */
+      putPixel(xm-y, ym-x, color); /*  II. Quadrant */
+      putPixel(xm+x, ym-y, color); /* III. Quadrant */
+      putPixel(xm+y, ym+x, color); /*  IV. Quadrant */
+      r = err;
+      if (r <= y) err += ++y*2+1;           /* e_xy+e_y < 0 */
+      if (r > x || err > y) err += ++x*2+1; /* e_xy+e_x > 0 or no 2nd y-step */
+   } while (x < 0);
+}

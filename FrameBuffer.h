@@ -28,8 +28,10 @@ class FrameBuffer{
 		long getRelativePosition(int x, int y);
 		void initScreen();
 		void drawScreen();
+		void drawLayer(char * layer);
 		int getWidth();
 		int getHeight();
+		void drawCircle(int xm, int ym, int r, unsigned int color);
 
 		void fillPolygon(int x, int y, unsigned int color);
 		void fillPolygon(Point P, unsigned int color);
