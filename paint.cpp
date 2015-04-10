@@ -7,6 +7,10 @@
 #include <pthread.h>
 
 #define MOUSE_POS 100
+#define EXTREME_LEFT	0
+#define EXTREME_RIGHT	1366
+#define EXTREME_TOP		0
+#define EXTREME_BOTTOM	768
 
 //global variable
 FrameBuffer fb;
@@ -14,6 +18,8 @@ char shape;
 int xt, yt, xn, ynn;
 int curPosX, curPosY;
 unsigned char threadLoop = 1;
+unsigned char isPalleteShow = 0;
+unsigned int storedColor = 0xFFFFFF;
 
 void* handleInput(void * arg)
 {
@@ -36,9 +42,12 @@ void* handleInput(void * arg)
 				shape = 'p';
 			}else if (Keyboard::getKeyCode() == '4')
 			{
-				shape='x';
-			}else if (Keyboard::getKeyCode() == 'p'
-				|| Keyboard::getKeyCode() == 27)
+				shape = 'f';
+			}else if (Keyboard::getKeyCode() == 'p')
+			{
+				isPalleteShow = 1;
+			}
+			else if (Keyboard::getKeyCode() == 27)
 			{
 				threadLoop = 0;
 			}
@@ -95,11 +104,76 @@ void drawShapeToLayer(char * layer){
 	      if (r > x || err > y) err += ++x*2+1; /* e_xy+e_x > 0 or no 2nd y-step */
 	   } while (x < 0);
 	}
-	else if (shape == 'p')
-	{
-
-	}
 }	
+
+unsigned int getPixelFromLayer(int x, int y, char * layer)
+{
+	long int location = fb.getRelativePosition(x, y);
+	return *((unsigned int*)(layer+location));
+}
+
+void floodFillOnLayer(int x, int y, unsigned int color, char * layer)
+{
+	if(color!=0 && getPixelFromLayer(x, y, layer)==0){
+		putPixelOnLayer(x, y, color, layer);
+		if(x>EXTREME_LEFT)
+			floodFillOnLayer(x-1,y,color, layer); //kiri 
+		if(x<EXTREME_RIGHT-1)
+			floodFillOnLayer(x+1,y,color, layer); //kanan
+		if(y>EXTREME_TOP)
+			floodFillOnLayer(x,y-1,color, layer); //atas
+		if(y<EXTREME_BOTTOM-1)
+			floodFillOnLayer(x,y+1,color, layer); //bawah
+	}
+}
+
+void drawPallete(){
+	//grid is between 0 and EXTREME_LEFT
+	//make 8x2 grid w/ each size 40x40
+	int i, j;
+	int size = 45;
+
+	unsigned int color = (R<<16) | (G<<8) | B;
+		for (unsigned int x=0;x<256;x++)
+		{
+			for (unsigned int y=0;y<256;y++)
+			{
+				fb.putPixel(x,y,(x << 16) | (y << 8) | B);
+			}
+		}
+		for (unsigned int y=0;y<256;y++)
+		{
+			for (unsigned int x=300;x<350;x++)
+			{
+				fb.putPixel(x,y,y);
+			}
+		}
+		if (panel)
+		{
+			for (unsigned int x=300;x<350;x++)
+			{
+				fb.putPixel(x,B,0xffffff);
+			}
+		}
+		else
+		{
+			fb.putPixel(R,G,~color);
+		}
+		for (unsigned int x=0;x<100;x++)
+		{
+			for (unsigned int y=0;y<100;y++)
+			{
+				if (x == 0 || x == 99 || y == 0 || y == 99)
+				{
+					fb.putPixel(400+x,y,0xffffff);
+				}
+				else
+				{
+					fb.putPixel(400+x,y,color);
+				}
+			}
+		}
+}
 
 int main() {
 	
@@ -131,9 +205,18 @@ int main() {
 		fread(mouseAttr, sizeof(char), 3, fmouse);
 		fb.initScreen();
 		if((mouseAttr[0]&1)>0){
+			if(isPalleteShow)
+			{
+				fb.getPixel(cursor.getCoord());
+				isPalleteShow = 0;
+			}
 			if(shape == 'p')
 			{
 				tempPoly.push_back(Point(cursor.getCoord()));
+			}else if (shape=='f')
+			{
+				unsigned int color = 0x0000FF;
+				floodFillOnLayer(cursor.getCoord().getX(), cursor.getCoord().getY(), color, layer);
 			}
 			else if (left){
 				xn = cursor.getCoord().getX();
@@ -169,11 +252,11 @@ int main() {
 			}
 		}
 		cursor.move(mouseAttr[1], -mouseAttr[2]);
-		if(cursor.getCoord().getX() <0 || cursor.getCoord().getX()>1366)
+		if(cursor.getCoord().getX() <0 || cursor.getCoord().getX()>EXTREME_RIGHT)
 		{
 			cursor.move(-mouseAttr[1], 0);
 		}
-		if (cursor.getCoord().getY() <0 || cursor.getCoord().getY()>768)
+		if (cursor.getCoord().getY() <EXTREME_TOP || cursor.getCoord().getY()>EXTREME_BOTTOM)
 		{
 			cursor.move(0, mouseAttr[2]);	
 		}
@@ -202,6 +285,7 @@ int main() {
 			fb.drawLine(tempPoly[tempPoly.size()-1], cursor.getCoord(), 0xFFFFFF);
 		}
 		cursor.drawCursor(&fb, 0xFFFFFF);
+		//drawPallete();
 		fb.drawScreen();
 	}
 
