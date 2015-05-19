@@ -19,6 +19,7 @@ int main()
 	FrameBuffer fb;
 	
 	//init keyboard listener
+	// inisialisasi event keyboard pada Linux
 	tcgetattr(0, &orig_termios);
 	memcpy(&new_termios, &orig_termios, sizeof(new_termios));
 	atexit(resetTerminal);
@@ -29,8 +30,11 @@ int main()
 	unsigned int R = 0;
 	unsigned int G = 0;
 	unsigned int B = 0;
+
+	// loop utama program
 	while(1)
 	{
+		// pada awal loop membaca input dari keyboard
 		int keyCode;
 		int r;
 		unsigned char c;
@@ -44,6 +48,18 @@ int main()
 			else
 				keyCode = c;
 
+			//////////////////////////////
+			// membaca input dari keyboard
+			//////////////////////////////
+
+			// panel colorpicker sebelah kiri untuk mengambil warna yang diinginkan
+			// tekan w, a, s, d untuk memindahkan cursor
+
+			// panel colorpicker sebelah kanan untuk mengatur nilai Blue pada warna
+			// tekan angka 9 untuk mengaktifkan panel
+			// tekan w atau a untuk mengubah nilai Blue pada panel sebelah kanan
+
+			// tekan Esc atau p untuk keluar dari program
 			if(keyCode == 'w'){
 				if (panel)
 				{
@@ -123,7 +139,13 @@ int main()
 				exit(0);
 			}
 		}
+
+		// inisialisasi framebuffer dengan mengosongkan layar
 		fb.initScreen();
+
+		//////////////////////////////
+		// menggambar panel colorpicker
+		//////////////////////////////
 		unsigned int color = (R<<16) | (G<<8) | B;
 		for (unsigned int x=0;x<256;x++)
 		{
@@ -164,7 +186,12 @@ int main()
 				}
 			}
 		}
+
+		// menggambarkan setiap pixel pada framebuffer ke layar
 		fb.drawScreen();
+
+		// setelah framebuffer ditampilkan ke layar
+		// program kembali ke awal loop untuk mendeteksi input keyboard
 	}
 	return 0;
 }
